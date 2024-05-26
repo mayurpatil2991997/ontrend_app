@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ontrend/screens/home/home_screen.dart';
@@ -5,7 +6,9 @@ import 'package:ontrend/screens/login/login_screen.dart';
 import 'package:ontrend/screens/register/register_screen.dart';
 import 'package:sizer/sizer.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
