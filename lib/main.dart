@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ontrend/screens/home/home_screen.dart';
 import 'package:ontrend/screens/login/login_screen.dart';
+import 'package:ontrend/screens/register/register_screen.dart';
 import 'package:sizer/sizer.dart';
 
 void main() {
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const LoginScreen(),
+        home: const HomeScreen(),
       );
     });
   }

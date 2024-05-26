@@ -14,6 +14,7 @@ class CustomTextField extends StatelessWidget {
   Widget? widget;
   GestureTapCallback? onTap, onSufixIconClick;
   FocusNode? focusNode;
+  double? width;
   bool obscureText = false,
       showCursor = true,
       readOnly = true,
@@ -23,6 +24,8 @@ class CustomTextField extends StatelessWidget {
   bool enabled;
   final InputDecoration? decoration;
   Widget? suFixIcon;
+  bool? prifix;
+  bool? suffix;
   final TextInputAction? textInputAction;
   // final FormFieldValidator<String?>? validator;
 
@@ -34,6 +37,7 @@ class CustomTextField extends StatelessWidget {
       required this.keyboardType,
       // this.validator,
       this.onTap,
+      this.width,
       this.focusNode,
       this.showCursor = false,
       this.obscureText = false,
@@ -45,6 +49,8 @@ class CustomTextField extends StatelessWidget {
       this.maxLength,
       this.enabled = true,
       this.suFixIcon,
+      this.prifix = false,
+      this.suffix = false,
       this.onSufixIconClick,
       this.textInputAction,
       this.validator,
@@ -55,11 +61,12 @@ class CustomTextField extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(right: 6.w),
       child: Container(
+        width: width,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(14.0), // Match border radius with Material widget
           color: Colors.white,
           boxShadow: [
-            BoxShadow(
+            const BoxShadow(
               color: Colors.grey,
               offset: Offset(0.0, 1.0), //(x,y)
               blurRadius: 6.0,
@@ -86,8 +93,8 @@ class CustomTextField extends StatelessWidget {
                   border: const OutlineInputBorder(),
                   hintText: hintText,
                   hintStyle: AppTextStyle.regular.copyWith(
-                      color: AppColor.blackColor,
-                      fontSize: 14
+                      color: AppColor.blackColor.withOpacity(0.5),
+                      fontSize: 16
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: const BorderSide(
@@ -102,10 +109,56 @@ class CustomTextField extends StatelessWidget {
                       borderRadius: BorderRadius.circular(14)
                   ),
                   isDense: true,
+                    prefixIcon: prifix == true ? Container(
+                      padding: EdgeInsets.only(left: 3.w, right: 8.w), // Adjust padding to fit the hint text
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            "+968",
+                            style: AppTextStyle.regular.copyWith(
+                              color: AppColor.blackColor.withOpacity(0.5),
+                              fontSize: 16,
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_drop_down,
+                            size: 24,
+                            color: AppColor.blueColor.withOpacity(0.4),
+                          ),
+                          Container(
+                            height: 7.h,
+                            child: const VerticalDivider(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ) : null,
 
                   focusColor: AppColor.primaryColor,
                   counterText: counterText ?? "",
-                  suffixIcon: suFixIcon),
+                  suffixIcon: suffix == true ? Container(
+                    padding: EdgeInsets.only(left: 2.w, right: 4.w), // Adjust padding to fit the hint text
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 4.h,
+                          child: const VerticalDivider(
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const Icon(
+                          Icons.multitrack_audio_rounded,
+                          size: 24,
+                          color: Colors.red,
+                        ),
+                      ],
+                    ),
+                  ) : null,),
         ),
       ),
     );
