@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:ontrend/constants/app_const_assets.dart';
 import 'package:ontrend/controller/home/home_controller.dart';
@@ -68,316 +69,319 @@ class _HomeScreenState extends State<HomeScreen> {
     size = MediaQuery.of(context).size;
     height = size.height;
     width = size.width;
-    return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 4.w
-        ),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+    return WillPopScope(
+      onWillPop: showExitPopup,
+      child: Scaffold(
+        body: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 4.w
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 6.h,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Icon(
+                      Icons.location_pin,
+                      color: Colors.red,
+                      size: 30,
+                    ),
+                    SizedBox(
+                      width: 2.w,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Janub Ad Dahariz",
+                          style: AppTextStyle.semiBold.copyWith(
+                              color: AppColor.blackColor,
+                              fontSize: 12
+                          ),
+                        ),
+                        Text(
+                          "Salalah, oman",
+                          style: AppTextStyle.medium.copyWith(
+                              color: AppColor.blueColor,
+                              fontSize: 12
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    likeWidget(),
+                    SizedBox(
+                      width: 3.w,
+                    ),
+                    notificationWidget()
+                  ],
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                CustomTextField(
+                  hintText: "Search",
+                  controller: controller.searchController,
+                  keyboardType: null,
+                  suffix: true,
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                SizedBox(
+                  height: 15.h,
+                  width: MediaQuery.of(context).size.width,
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: _images.length,
+                    itemBuilder: (context, index) {
+                      return Image.asset(
+                        _images[index],
+                        fit: BoxFit.cover,
+                        height: 100,
+                        width: MediaQuery.of(context).size.width,
+                      );
+                    },
+                  ),
+                ),
+                Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    child: SmoothPageIndicator(
+                      controller: _pageController,
+                      count: _images.length,
+                      effect: const WormEffect(
+                        dotHeight: 8,
+                        dotWidth: 8,
+                        activeDotColor: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Text(
+                  "Categories",
+                  style: AppTextStyle.semiBold.copyWith(
+                      color: AppColor.blackColor,
+                      fontSize: 14
+                  ),
+                ),
               SizedBox(
-                height: 6.h,
+                height: 2.h,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Icon(
-                    Icons.location_pin,
-                    color: Colors.red,
-                    size: 30,
+              Container(
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.grey,
+                      offset: Offset(0.0, 1.0), //(x,y)
+                      blurRadius: 6.0,
+                    ),
+                  ],//
+                ),
+                child: SizedBox(
+                  height: 25.h,
+                  child: GridView.builder(
+                    padding: const EdgeInsets.all(8.0),
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 4, // Number of columns
+                      crossAxisSpacing: 15.0,
+                      mainAxisSpacing: 15.0,
+                      childAspectRatio: 0.90, // Adjust as needed
+                    ),
+                    itemCount: items.length,
+                    itemBuilder: (context, index) {
+                      return GridItem(
+                        image: items[index]['image']!,
+                        title: items[index]['title']!,
+                      );
+                    },
                   ),
-                  SizedBox(
-                    width: 2.w,
+                ),
+              ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 2.w
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "Janub Ad Dahariz",
+                        "Offers",
                         style: AppTextStyle.semiBold.copyWith(
                             color: AppColor.blackColor,
-                            fontSize: 12
+                            fontSize: 14
                         ),
                       ),
                       Text(
-                        "Salalah, oman",
-                        style: AppTextStyle.medium.copyWith(
-                            color: AppColor.blueColor,
-                            fontSize: 12
+                        "View All",
+                        style: AppTextStyle.semiBold.copyWith(
+                            color: AppColor.blackColor,
+                            fontSize: 14
                         ),
                       ),
                     ],
                   ),
-                  const Spacer(),
-                  likeWidget(),
-                  SizedBox(
-                    width: 3.w,
-                  ),
-                  notificationWidget()
-                ],
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
-              CustomTextField(
-                hintText: "Search",
-                controller: controller.searchController,
-                keyboardType: null,
-                suffix: true,
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
-              SizedBox(
-                height: 15.h,
-                width: MediaQuery.of(context).size.width,
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: _images.length,
-                  itemBuilder: (context, index) {
-                    return Image.asset(
-                      _images[index],
-                      fit: BoxFit.cover,
-                      height: 100,
-                      width: MediaQuery.of(context).size.width,
-                    );
-                  },
                 ),
-              ),
-              Center(
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  child: SmoothPageIndicator(
-                    controller: _pageController,
-                    count: _images.length,
-                    effect: const WormEffect(
-                      dotHeight: 8,
-                      dotWidth: 8,
-                      activeDotColor: Colors.blue,
+                SizedBox(
+                  height: 1.h,
+                ),
+                SizedBox(
+                  height: 45.h,
+                  child: GridView.builder(
+                    padding: const EdgeInsets.all(8.0),
+                    physics: const NeverScrollableScrollPhysics(),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2, // Number of columns
+                      crossAxisSpacing: 6.0,
+                      mainAxisSpacing: 6.0,
+                      childAspectRatio: 2/2, // Adjust as needed
                     ),
+                    itemCount: itemsOffer.length,
+                    itemBuilder: (context, index) {
+                      return GridItemOffer(
+                        image: items[index]['image']!,
+                        title: items[index]['title']!,
+                      );
+                    },
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 1.h,
-              ),
-              Text(
-                "Categories",
-                style: AppTextStyle.semiBold.copyWith(
-                    color: AppColor.blackColor,
-                    fontSize: 14
+                SizedBox(
+                  height: 2.h,
                 ),
-              ),
-            SizedBox(
-              height: 2.h,
-            ),
-            Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.grey,
-                    offset: Offset(0.0, 1.0), //(x,y)
-                    blurRadius: 6.0,
+                Text(
+                  "Top rated restaurant near oou",
+                  style: AppTextStyle.semiBold.copyWith(
+                      color: AppColor.blackColor,
+                      fontSize: 14
                   ),
-                ],//
-              ),
-              child: SizedBox(
-                height: 25.h,
-                child: GridView.builder(
-                  padding: const EdgeInsets.all(8.0),
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4, // Number of columns
-                    crossAxisSpacing: 15.0,
-                    mainAxisSpacing: 15.0,
-                    childAspectRatio: 0.90, // Adjust as needed
-                  ),
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    return GridItem(
-                      image: items[index]['image']!,
-                      title: items[index]['title']!,
-                    );
-                  },
                 ),
-              ),
-            ),
-              SizedBox(
-                height: 2.h,
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 2.w
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Offers",
-                      style: AppTextStyle.semiBold.copyWith(
-                          color: AppColor.blackColor,
-                          fontSize: 14
-                      ),
-                    ),
-                    Text(
-                      "View All",
-                      style: AppTextStyle.semiBold.copyWith(
-                          color: AppColor.blackColor,
-                          fontSize: 14
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height: 1.h,
-              ),
-              SizedBox(
-                height: 45.h,
-                child: GridView.builder(
-                  padding: const EdgeInsets.all(8.0),
-                  physics: const NeverScrollableScrollPhysics(),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2, // Number of columns
-                    crossAxisSpacing: 6.0,
-                    mainAxisSpacing: 6.0,
-                    childAspectRatio: 2/2, // Adjust as needed
-                  ),
-                  itemCount: itemsOffer.length,
-                  itemBuilder: (context, index) {
-                    return GridItemOffer(
-                      image: items[index]['image']!,
-                      title: items[index]['title']!,
-                    );
-                  },
-                ),
-              ),
-              SizedBox(
-                height: 2.h,
-              ),
-              Text(
-                "Top rated restaurant near oou",
-                style: AppTextStyle.semiBold.copyWith(
-                    color: AppColor.blackColor,
-                    fontSize: 14
-                ),
-              ),
-              SizedBox(
-                height: 30.h,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: itemsTop.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Stack(
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.asset(
-                                  items[index]['image']!,
-                                  fit: BoxFit.cover,
-                                  height: 200,
-                                  width: 150,
-                                ),
-                              ),
-                              Positioned(
-                                bottom: 0.5,
-                                left: 0.0,
-                                right: 0.0,
-                                top: 130,
-                                child: Container(
-                                  color: Colors.black54,
-
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          items[index]['title']!,
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16.0,
-                                              fontWeight: FontWeight.w700),
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              "40-45 min"!,
-                                              style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 13.0,
-                                                  fontWeight: FontWeight.w400),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            Container(
-                                              decoration:BoxDecoration(
-                                                  color: Colors.green,
-                                                  borderRadius: BorderRadius.circular(2)
-                                              ),
-                                              child: const Row(
-                                                children: [
-                                                  Text(" 4.5 ",
-                                                    style: TextStyle(color: Colors.white,fontSize: 12),
-                                                  ),
-                                                  Icon(
-                                                    Icons.star,
-                                                    color: Colors.white,
-                                                    size: 15,
-                                                  )
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        )
-                                      ],
-                                    ),
+                SizedBox(
+                  height: 30.h,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: itemsTop.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Stack(
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.asset(
+                                    items[index]['image']!,
+                                    fit: BoxFit.cover,
+                                    height: 200,
+                                    width: 150,
                                   ),
                                 ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
-                    );
-                  },
+                                Positioned(
+                                  bottom: 0.5,
+                                  left: 0.0,
+                                  right: 0.0,
+                                  top: 130,
+                                  child: Container(
+                                    color: Colors.black54,
+
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            items[index]['title']!,
+                                            style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16.0,
+                                                fontWeight: FontWeight.w700),
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Text(
+                                                "40-45 min"!,
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 13.0,
+                                                    fontWeight: FontWeight.w400),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              Container(
+                                                decoration:BoxDecoration(
+                                                    color: Colors.green,
+                                                    borderRadius: BorderRadius.circular(2)
+                                                ),
+                                                child: const Row(
+                                                  children: [
+                                                    Text(" 4.5 ",
+                                                      style: TextStyle(color: Colors.white,fontSize: 12),
+                                                    ),
+                                                    Icon(
+                                                      Icons.star,
+                                                      color: Colors.white,
+                                                      size: 15,
+                                                    )
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 2.h
-              ),
-              Text(
-                "Restaurants to Explore (1288 Founds)",
-                style: AppTextStyle.semiBold.copyWith(
-                  color: AppColor.blackColor,
-                  fontSize: 14
+                SizedBox(
+                  height: 2.h
                 ),
+                Text(
+                  "Restaurants to Explore (1288 Founds)",
+                  style: AppTextStyle.semiBold.copyWith(
+                    color: AppColor.blackColor,
+                    fontSize: 14
+                  ),
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: 4,
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.all(00),
+                  itemBuilder: (BuildContext context, int index) {
+                    return exploreWidget();
+                  }
               ),
-              SizedBox(
-                height: 1.h,
-              ),
-              ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: 4,
-                shrinkWrap: true,
-                padding: const EdgeInsets.all(00),
-                itemBuilder: (BuildContext context, int index) {
-                  return exploreWidget();
-                }
+              ],
             ),
-            ],
           ),
         ),
       ),
@@ -603,6 +607,51 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  Future<bool> showExitPopup() async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColor.orangeColor,
+        title: Text(
+          "Exit App",
+          style: AppTextStyle.semiBold.copyWith(
+              color: AppColor.whiteColor
+          ),
+        ),
+        content: Text(
+          "Do you want to exit an App?",
+          style: AppTextStyle.semiBold.copyWith(
+              color: AppColor.whiteColor
+          ),
+        ),
+        actions: [
+          ElevatedButton(
+            onPressed: () => Get.back(),
+            child: Text(
+              'No',
+              style: AppTextStyle.semiBold.copyWith(
+                  color: AppColor.primaryColor,
+                  fontSize: 12
+              ),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () =>
+                SystemChannels.platform.invokeMethod('SystemNavigator.pop'),
+            child: Text(
+              'Yes',
+              style: AppTextStyle.semiBold.copyWith(
+                  color: AppColor.primaryColor,
+                  fontSize: 12
+              ),
+            ),
+          ),
+        ],
+      ),
+    ) ??
+        false;
   }
 }
 class GridItem extends StatelessWidget {
