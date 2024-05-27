@@ -18,8 +18,8 @@ class Validators {
     // final RegExp regExp = RegExp(pattern);
     if (value.isEmpty) {
       return 'Password is required';
-    } else if (value.length <= 4) {
-      return 'Password should be more than 5 characters';
+    } else if (value.length <= 5) {
+      return 'Password should be more than 6 characters';
     }
     // else if (!regExp.hasMatch(value)) {
     //   return '''The Password must be at least 8 characters long and contain a mixture of both uppercase and lowercase letters, at least one number and one special character (e.g.,! @ # ?).''';
@@ -44,7 +44,7 @@ class Validators {
       //   //   return "Please Enter a Valid Phone Number";
       // }
       // if (mobileNumberLength != null) {
-    } else if (value!.length < (mobileNumberLength ?? 9)) {
+    } else if (value!.length < (mobileNumberLength ?? 5)) {
       return "Invalid Phone Number";
     } else if (value.contains(RegExp(r'[;*+_,#/()]'))) {
       return "Invalid Phone Number";
